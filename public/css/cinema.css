@@ -835,7 +835,8 @@ background: transparent;
     background-repeat: no-repeat;
     background-size: cover;
     background-attachment: fixed;
-    background-position: center;
+    background-position-x: center;
+    background-position-y: 77px;
 }
 .movie-page-bg-cover{
     width: 100%;
@@ -1094,6 +1095,11 @@ input:checked +label {
     color: white !important;
     text-decoration: none;
 }
+input:focus +label {
+    text-shadow: 1px 0px 3px cyan;
+    color: white !important;
+    text-decoration: none;
+}
 label{
     max-height: 50px;
     min-width: 100px;
@@ -1204,6 +1210,43 @@ input.year-changed{
     color: #dadada;
     border-bottom: 1px solid #191919;
 }
+input.form-control{
+    background: rgba(0,0,0,0.3);
+    border: 1px solid #004e4e;
+    color: #fafafa;
+}
+.btn{
+    width: 100%;
+    height: 100%;
+    border-bottom-left-radius: 50%90%;
+    border-bottom-right-radius: 50%90%;
+    background: darkcyan;
+    border: none;
+    border-bottom-width: medium;
+    border-bottom-style: none;
+    border-bottom-color: currentcolor;
+    color: #dadada;
+    border-bottom: 1px solid #191919;
+}
+.btn:hover {
+    background: darkcyan;
+    text-shadow: cyan 1px 0px 1px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.05) inset,0px 0px 8px rgba(255,255,255,0.6);
+    text-shadow: white 1px 0px 1px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.05) inset,0px 0px 8px rgba(0,255,255,0.6);
+}
+#userimage-input{
+    display: none;
+}
+.userimage-label{
+    display: inline;
+}
+.userimage-label img{
+    max-width: 100%;max-height: 150px;
+    border-radius: 0 15% 0 15%;
+    border:1px solid #004e4e;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.05) inset,0px 0px 8px rgba(0,120,120,0.6);
+}
 .filter-switch-cont {
     float: left;
     width: 100%;
@@ -1211,6 +1254,33 @@ input.year-changed{
     align-items: center;
     justify-content: center;
     padding: 0 15px;
+}
+textarea.form-control {
+    background: rgba(0,0,0,0.3);
+    border: 1px solid #004e4e;
+    max-width: 100%;
+    color: #fafafa;
+}
+.rememberme{
+    display: none;
+}
+.rememberme-label{
+    font-weight: 700 !important;
+    padding: 0 !important;
+}
+.login-btn {
+    border-top-left-radius: 25px;
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-left-radius: 25px;
+    width: auto;
+}
+.pass-forgot-btn {
+    border-top-left-radius:0;
+    border-bottom-right-radius:  25px;
+    border-top-right-radius:  25px;
+    border-bottom-left-radius: 0;
+    width: auto;
 }
 .list-filter-submit:hover{
     /*text-shadow: cyan 1px 0px 1px;*/
@@ -1266,6 +1336,56 @@ input.year-changed{
 }
 
 
+.register-cont{
+    float: left;
+    background: rgba(0,255,255,0.5);
+    width: 100%;
+    padding: 7px;
+    border-radius: 25px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.05) inset,0px 0px 8px rgba(255,255,255,0.9);
+    min-height: 230px;
+}
+.register-panel{
+    background: rgba(0,0,0,0.6);
+    border: 1px solid #2a2a2a;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    height: auto;
+    padding-left: 6px;
+    padding-right: 6px;
+    margin-bottom: 0;
+}
+.register-heading{
+    float: left;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(0,0,0,0.5);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    z-index: 5;
+    text-align: center;
+    font-size: 18px;
+    text-shadow: 0 1px 5px #00FFFF;
+    color: white;
+    padding: 1px 5px 3px 5px;
+}
+.register-body{
+width: 100%;
+}
+.register-body .control-label {
+    color: #fafafa;
+}
 input[type=range] {
     -webkit-appearance: none;
     width: 100%;

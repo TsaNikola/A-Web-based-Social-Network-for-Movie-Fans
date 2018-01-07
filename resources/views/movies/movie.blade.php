@@ -137,37 +137,51 @@ header('X-Frame-Options:Allow-From https://www.youtube.com');
                     </div>
                 </div>
                 <div id="movie-comments" class="movie-data-cont col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                    <div class="comment-cont">
-                        @foreach($movie['comments'] as $comment)
-                            <div class="movie-comment col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
-                                <a href="{{route("user",array("id"=>$comment['userCommentId']))}}">
-                                <div class="comment-user-image-outter col-xs-4 col-sm-3 col-md-2 col-lg-1 col-xl-1">
+                    <div class="comment-cont" style="width: 100%">
+                    @if(!Auth::check())
 
-                                    @if($comment['image']!='')
-                                        <img alt="{{$comment['username']}}-{{$comment['idComment']}}" src="/img/users/{{$comment['image']}}" class="comment-image">
-                                    @else
-                                        <img alt="{{$comment['username']}}-{{$comment['idComment']}}" src="/cinema/public/img/no_avatar.jpg" class="comment-image">
-                                    @endif
-                                        <div class="comment-user-name">
-                                            <span>{{$comment['username']}}</span>
-                                        </div>
-                                </div>
-                                </a>
-                                <div class="comment-user col-xs-8 col-sm-9 col-md-12 col-lg-11 col-xl-11">
-
-                                <div class="comment-user-date">
-                                    <span><i>{{date("M jS, Y - H:i",strtotime($comment['publishDate']))}}</i></span>
-                                </div>
-                                </div>
-                                <div class="comment-user col-xs-8 col-sm-9 col-md-12 col-lg-11 col-xl-11">
-                                    <span>{{$comment['content']}}</span>
-                                </div>
-
+                            <div style="display: flex;justify-content: center;font-size: 18px;">
+                                <span> You need to
+                                    <a href="{{route('login')}}">login</a> or
+                                    <a href="{{route('register')}}">register</a>
+                                    in order to write a comment
+                                </span>
                             </div>
 
-                        @endforeach
-                    </div>
+                        @else
 
+                    @endif
+
+
+                            @foreach($movie['comments'] as $comment)
+                                <div class="movie-comment col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                    <a href="{{route("user",array("id"=>$comment['userCommentId']))}}">
+                                        <div class="comment-user-image-outter col-xs-4 col-sm-3 col-md-2 col-lg-1 col-xl-1">
+
+                                            @if($comment['image']!='')
+                                                <img alt="{{$comment['username']}}-{{$comment['idComment']}}" src="/img/users/{{$comment['image']}}" class="comment-image">
+                                            @else
+                                                <img alt="{{$comment['username']}}-{{$comment['idComment']}}" src="/cinema/public/img/no_avatar.jpg" class="comment-image">
+                                            @endif
+                                            <div class="comment-user-name">
+                                                <span>{{$comment['username']}}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    <div class="comment-user col-xs-8 col-sm-9 col-md-12 col-lg-11 col-xl-11">
+
+                                        <div class="comment-user-date">
+                                            <span><i>{{date("M jS, Y - H:i",strtotime($comment['publishDate']))}}</i></span>
+                                        </div>
+                                    </div>
+                                    <div class="comment-user col-xs-8 col-sm-9 col-md-12 col-lg-11 col-xl-11">
+                                        <span>{{$comment['content']}}</span>
+                                    </div>
+
+                                </div>
+
+                            @endforeach
+                        </div>
                 </div>
 
                 <div id="movie-trailers" style="display: none;" class="movie-data-cont col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">

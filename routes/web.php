@@ -75,8 +75,8 @@ Route::get('/crew/{firstChar}', ['uses'=>'CreditsController@allcrew', 'as'=>'all
 Route::get('/users/{userid}', ['uses'=>'UsersController@user', 'as'=>'user']);
 Route::post('/users/{userid}', ['uses'=>'UsersController@postuser', 'as'=>'postuser']);
 Route::get('/users', ['uses'=>'UsersController@allusers', 'as'=>'allusers']);
-Route::get('/users/profile', ['uses'=>'UsersController@profile', 'as'=>'profile']);
-Route::post('/users/profile', ['uses'=>'UsersController@postprofile', 'as'=>'postprofile']);
+Route::get('/profile', ['uses'=>'UsersController@profile', 'as'=>'profile']);
+Route::post('/profile', ['uses'=>'UsersController@postprofile', 'as'=>'postprofile']);
 //Με την παρακάτω εντολή δηλώνονται αυτόματα όλα τα routes που χρειάζονται για τις βασικές λειτουργίες εγγραφής και σύνδεσης και αποσύνδεσης του χρήστη
 Auth::routes();
 

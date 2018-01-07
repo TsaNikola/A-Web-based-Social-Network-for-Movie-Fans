@@ -40,8 +40,13 @@
 
         </div>
         <ul class="nav navbar-nav user-menu">
+            @if(!Auth::check())
             <li><a href="{{route('login')}}">Login</a></li>
             <li><a href="{{route('register')}}">Register</a></li>
+            @else
+                <li><a href="{{route('profile')}}">Profile</a></li>
+                <li><a href="{{route('logout')}}">Logout</a></li>
+            @endif
         </ul>
         <ul class="hamsearch">
             <li style="border-color: darkcyan;">

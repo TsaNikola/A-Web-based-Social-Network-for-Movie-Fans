@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use Input;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -27,7 +28,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -47,11 +48,18 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        print_r(request()->all());
+
+//        print_r($data);
+        echo "<br><br>";
+//        print_r(request()->all());
+
+//        exit;
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'aboutme' => 'string',
+            'userimage' => 'image',
         ]);
     }
 
@@ -63,10 +71,22 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $fileName = 'null';
         print_r($data);
+//        exit;
+        $image = $data['userimage'];
+        if ($image->isValid()) {
+            $destinationPath = public_path('uploads/users/images');
+            $extension = $image->getClientOriginalExtension();
+            $fileName = uniqid().'.'.$extension;
+
+            $image->move($destinationPath, $fileName);
+        }
         return User::create([
-            'username' => $data['name'],
+            'username' => $data['username'],
             'email' => $data['email'],
+            'image' =>  $fileName,
+            'aboutme' =>  $data['aboutme'],
             'password' => bcrypt($data['password']),
         ]);
     }
