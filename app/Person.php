@@ -19,7 +19,8 @@ class Person extends Model
         //Ψάχνει στην βάση στον πίνακα που έχουμε δηλώσει στο model Person εκεί που το πεδίο idPerson έχει την τιμή της
         // μεταβλήτης $id παίρνει όλα τα δεδομένα των πεδίων εκείνης της εγγραφής και τα επιστρέφει σαν object.
        $info=Person::where('idPerson',$id)->get();
-        return $info[0];
+        $info = json_decode($info[0], True);
+        return $info;
     }
     //επιστρέφει τις ταινίες που συμμετείχε ο ηθοποιός με βάση το id του
     public static function getPersonCast($id)
@@ -72,6 +73,38 @@ class Person extends Model
                 $crew=array_merge($crew,$movietmp);
             }
         }
+        //επιστρέφει τον πίνακα με όλες τις ταινίες που βρέθηκαν και τα δεδομένα τους
+        return $crew;
+    }
+
+    public static function getPersonMovies($id)
+    {
+        //Ψάχνει στην βάση στον πίνακα movie_person εκεί που το πεδίο personMovieId έχει την τιμή που βρίσκεται στην
+        // μεταβλήτη $id και παίρνει όλα τα δεδομένα των πεδίων εκείνης της εγγραφής και τα επιστρέφει σαν object.
+        //Μέσα στο object είναι τα ids των ταινιών του συντελεστή.
+        $moviestmp=DB::table('movie_person')->where('personMovieId',$id)->get();
+        //μετατροπή του object σε πίνακα
+        $movies = json_decode($moviestmp, True);
+        //Δημιουργία του πίνακα που θα περιέχει τις ταινίες και τα δεδομένα τους
+        $crew=array();
+        foreach($movies as $key=>$movie) {
+            //καλεί την function getMovie του model Movie
+            $movietmp = Movie::getMovie($movie['moviePersonId']);
+            //μετατροπή του object σε πίνακα
+            $movietmp = json_decode($movietmp, True);
+            $moviegenres=Movie::getGenres($movie['moviePersonId']);
+            $moviegenres = json_decode($moviegenres, True);
+            //Βάζουμε τον χαρακτήρα του ηθοποιού στον πίνακα με τα δεδομένα της τρέχουσας ταινίας
+            $movietmp[0] = array_merge($movietmp[0], $movie);
+            $movietmp[0] = array_merge($movietmp[0], array("genres" => $moviegenres));
+            //Βάζουμε τα δεδομένα της τρέχουσας ταινίας στον πίνακα με τις υπόλοιπες ταινίες
+
+
+//            $movies[$key]['genres']=array();
+//            $movies[$key]['genres']=array_merge($movies[$key]['genres'],$moviegenres);
+            $crew = array_merge($crew, $movietmp);
+        }
+
         //επιστρέφει τον πίνακα με όλες τις ταινίες που βρέθηκαν και τα δεδομένα τους
         return $crew;
     }

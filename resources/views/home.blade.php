@@ -47,27 +47,6 @@
 
 
                                     @foreach ($movies as $movie)
-                                        {{--<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">--}}
-                                                {{--<div class="hgrid">--}}
-                                                    {{--<a class="hb-link" href="">--}}
-                                                    {{--<div class="home-box @if($movie->releaseDate>=date("YYYY-mm-dd")) home @elseif($movie->popularity>=4) popular @endif">--}}
-
-                                                        {{--@if($movie['poster']!='')--}}
-                                                            {{--<div title="{{$movie->title}} ({{$movie->releaseDatereleaseDate}})" class="hb-image"><img src="https://image.tmdb.org/t/p/w130{{$movie['poster']}}"></div>--}}
-                                                        {{--@elseif($movie['backdrop']!='')--}}
-                                                            {{--<div title="{{$movie->title}} ({{$movie->releaseDate}})" class="hb-image" style="background-image: url('https://image.tmdb.org/t/p/w130/{{$movie['backdrop']}}')"></div>--}}
-                                                        {{--@else--}}
-                                                            {{--<div title="{{$movie->title}} ({{$movie->releaseDate}})" class="hb-image" style="background-image: url('/img/default_poster.jpg')"></div>--}}
-                                                        {{--@endif--}}
-                                                        {{--<div class="hb-title">--}}
-                                                            {{--{{ $movie->title }}     @if($movie->releaseDate!=0) ({{substr($movie->releaseDate,0,4)}})         @endif--}}
-
-                                                        {{--</div>--}}
-
-                                                    {{--</div>--}}
-                                                    {{--</a>--}}
-                                                {{--</div>--}}
-                                        {{--</div>--}}
 
                                         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-2">
                                             <div class="hgrid">
@@ -75,11 +54,11 @@
                                                     <div class="home-box @if($movie->releaseDate>=date("YYYY-mm-dd")) home @elseif($movie->popularity>=4) popular @endif">
 
                                                         @if($movie['poster']!='')
-                                                            <div  class="hb-image"><img src="https://image.tmdb.org/t/p/w130{{$movie['poster']}}">
+                                                            <div  class="hb-image"><img src="https://image.tmdb.org/t/p/w154{{$movie['poster']}}">
                                                                 <div class="hb-ribbon">{{$movie->title}}   @if($movie->releaseDate!=0) ({{substr($movie->releaseDate,0,4)}})   @endif</div>
                                                             </div>
                                                        @else
-                                                            <div class="hb-image" style="background-image: url('/img/default_poster.jpg')"></div>
+                                                            <div class="hb-image" style="background-image: url('{{Request::root()}}/img/default_poster.jpg.png')"></div>
                                                         @endif
 
 
@@ -108,13 +87,11 @@
 
 
 
-    </div>
-    </div>
 
 
     <div class="pegination">
         {{ $movies->links() }}
     </div>
-    @include('footer')
+@include('footer')
 
 @endsection

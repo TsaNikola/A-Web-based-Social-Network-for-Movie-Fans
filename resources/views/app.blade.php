@@ -66,6 +66,7 @@
 
         @yield('content')
 
+
     <!-- Scripts -->
 
         <script>
@@ -75,5 +76,23 @@
     </script>
 
     </div>
+    <script>
+    $(document).ready(function(){
+        var footerheight=$('#footer').height();
+        var footerouterheight=$('#footer').outerHeight();
+        var menuheight=$('.navbar-static-top').outerHeight();;
+        var appheight=$('#app').outerHeight();
+        var coverheight=$('.movie-page-bg-cover').outerHeight();
+//        alert(footerheight);
+        $('#app').css('padding-bottom',footerheight+15+'px');
+        $('.movie-page-bg-cover').css('min-height',document.body.clientHeight-menuheight-footerouterheight);
+//        $('#app').bind('heightChange', function(){
+//            var footerheight=$('#footer').height();
+//            $('#app').css('padding-bottom',footerheight+15);
+//            alert(footerheight);
+//    });
+    });
+    </script>
+
 </body>
 </html>

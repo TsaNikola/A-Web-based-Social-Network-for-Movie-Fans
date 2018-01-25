@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Pagination\LengthAwarePaginator;
 use \Illuminate\Pagination\Paginator;
+use Auth;
 use DB;
 use App\Movie;
 use App\User;
@@ -18,13 +19,15 @@ class MoviesController extends Controller
     {
         //Καλούμε την function getAll από το model με όνομα Movie. Όλα τα models βρίσκονται στον φάκελο App (πχ. Movie.php)
         $movie= Movie::getAll($id);
+        $followersids=DB::table('user_movie')->where('movieUserId',$id)->pluck('userMovieId');
+        $followersids = json_decode($followersids, True);
         //παίρνουμε το object με τις ταπετσαρίες και του μετατρέπουμε σε πίνακα για να μπορέσουμε να δουλεψουμε με τις έτοιμες λειτουργίες που έχει η php για πίνακες
         $backgrounds= $movie['wallpapers'];
         $backgrounds = json_decode($backgrounds, True);
 
         //Με την παρακάτω εντολή το function ψάχνει μέσα στον φάκελο resources/views το αρχείο με όνομα movie.blade.php και το επιστρέφει για εμφάνιση στον περιηγητή
         //Στο compact() αναφέρουμε τα ονόματα από τις μεταβλητές και τα δεδομένα που θέλουμε (πχ πίνακες) και περνάνε στο αντίστοιχο blade αρχείο
-        return view('movies.movie',compact('movie','backgrounds'));
+        return view('movies.movie',compact('movie','backgrounds','followersids'));
     }
     function popular(){
         $movies = Movie::orderBy("popularity", "desc")->paginate(25);
@@ -190,7 +193,7 @@ class MoviesController extends Controller
 //return $moviesartemp;
              foreach($movies as $key=>$movie){
                $moviegenres=Movie::getGenres($movie['idMovie']);
-                 $moviegenres = json_decode(($moviegenres), True);
+                 $moviegenres = json_decode($moviegenres, True);
                  $movies[$key]['genres']=array();
                  $movies[$key]['genres']=array_merge($movies[$key]['genres'],$moviegenres);
 

@@ -89,4 +89,19 @@ class CreditsController extends Controller
         $creditype='crew';
         return view('credits.allcredits',compact('credits','alphabet','firstChar','creditype'));
     }
+
+    function credits($id){
+        $credit=Person::getInfo($id);
+        $movies=Person::getPersonMovies($id);
+
+
+
+        $movies= paginate($movies,15)->setPath(route('credit',array($id)));
+//        return $movies;
+
+//        return $credit;
+        return view('credits.credit',compact('credit','movies'));
+
+
+    }
 }

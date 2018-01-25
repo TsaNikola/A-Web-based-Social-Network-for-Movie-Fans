@@ -55,7 +55,7 @@ Route::post('/followuser/{id}/{user}', ['uses'=>'UsersController@followuser', 'a
 
 //Το route για την σελίδα εμφάνισης δεδομένων των συντελεστών μιας ταινίας. Στην θέση του {id} μπαίνει το αντίστοιχο id του συντελεστή.
 //Καλεί την function credit που βρίσκεται στον CreditsController και το route μπορεί να αναγνωριστεί με την ονομασία credit
-Route::get('/credit/{id}', ['uses'=>'CreditsController@credit', 'as'=>'credit']);
+Route::get('/credits/{id}', ['uses'=>'CreditsController@credits', 'as'=>'credit']);
 
 Route::get('/popular', ['uses'=>'MoviesController@popular', 'as'=>'popular']);
 Route::get('/toprated', ['uses'=>'MoviesController@toprated', 'as'=>'toprated']);
@@ -72,14 +72,46 @@ Route::post('/allmovies', ['uses'=>'MoviesController@postMovielist', 'as'=>'post
 
 Route::get('/cast/{firstChar}', ['uses'=>'CreditsController@allcast', 'as'=>'allcast']);
 Route::get('/crew/{firstChar}', ['uses'=>'CreditsController@allcrew', 'as'=>'allcrew']);
-Route::get('/users/{userid}', ['uses'=>'UsersController@user', 'as'=>'user']);
+Route::get('/users/{userid}', ['uses'=>'UsersController@profile', 'as'=>'user']);
 Route::post('/users/{userid}', ['uses'=>'UsersController@postuser', 'as'=>'postuser']);
 Route::get('/users', ['uses'=>'UsersController@allusers', 'as'=>'allusers']);
 Route::get('/profile', ['uses'=>'UsersController@profile', 'as'=>'profile']);
-Route::post('/profile', ['uses'=>'UsersController@postprofile', 'as'=>'postprofile']);
+Route::get('/profile/settings', ['uses'=>'UsersController@profilesettings', 'as'=>'profilesettings']);
+Route::post('/profile/settings', ['uses'=>'UsersController@profilesettings', 'as'=>'postprofilesettings']);
+
+
+Route::post('/adminsearch', ['uses'=>'SearchController@adminSearch', 'as'=>'adminsearch']);
+Route::post('/followmovie', ['uses'=>'UsersController@followmovie', 'as'=>'followmovie']);
+Route::post('/followuser', ['uses'=>'UsersController@followuser', 'as'=>'followuser']);
+Route::post('/commentsubmit', ['uses'=>'UsersController@commentsubmit', 'as'=>'commentsubmit']);
+Route::post('/commentdelete', ['uses'=>'UsersController@commentdelete', 'as'=>'commentdelete']);
 //Με την παρακάτω εντολή δηλώνονται αυτόματα όλα τα routes που χρειάζονται για τις βασικές λειτουργίες εγγραφής και σύνδεσης και αποσύνδεσης του χρήστη
 Auth::routes();
 
-//Route::get('/logout', ['uses'=>'SearchController@menuSearchg', 'as'=>'credit']);
+
+Route::group(['namespace' => 'Admin', 'prefix' => 'admin'], function () {
+
+
+    Route::get('dashboard', ['uses'=>'DashboardController@index', 'as'=>'dashboard']);
+
+    Route::get('dashboard/editMovies', ['uses'=>'DashboardController@editmovies', 'as'=>'admin.editmovies']);
+
+    Route::post('dashboard/editMovies', ['uses'=>'DashboardController@editmovies','as'=>'admin.editmovies']);
+
+    Route::get('dashboard/comments', ['uses'=>'DashboardController@comments','as'=>'admin.comments']);
+
+    Route::post('dashboard/comments', ['uses'=>'DashboardController@comments','as'=>'admin.comments']);
+
+    Route::get('dashboard/users', ['uses'=>'DashboardController@useredit','as'=>'admin.useredit']);
+
+    Route::post('dashboard/users', ['uses'=>'DashboardController@useredit','as'=>'admin.useredit']);
+
+});
+
+
+Route::fallback(function(){
+    return response()->view('notFound', [], 404);
+});
+
 
 

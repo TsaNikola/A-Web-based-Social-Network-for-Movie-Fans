@@ -55,6 +55,51 @@ class Movie extends Model
         return $followers;
     }
 
+    public static function getFollows($id)
+    {
+        $followsids= DB::table('user_movie')->where('userMovieId',$id)->orderBy('followDate','desc')->get();
+        $follows=array();
+        foreach ($followsids as $followsid){
+            $id=$followsid->movieUserId;
+            $date=$followsid->followDate;
+            $follow= Movie::getMovie($id);
+            $follow = json_decode($follow[0], True);
+            $follow=array_merge($follow,array('followDate'=>$date));
+            array_push($follows,$follow);
+        }
+        return $follows;
+    }
+
+    public static function getLatestActivity($id){
+        $follows=Movie::getFollows($id);
+        $comments=array();
+        foreach ($follows as $follow){
+            $comment=Comment::getLatestComments($follow['idMovie'],'movie');
+            if(isset($comment[0])) {
+         foreach($comment as $key=>$comm){
+             $follow = Movie::getMovie($follow['idMovie']);
+             $follow = json_decode($follow[0], True);
+             $comment[$key]= array_merge($comment[$key],array('date'=>strtotime($comm['publishDate'])));
+             $comment[$key] = array_merge($follow,$comment[$key] );
+         }
+                $comments=    array_merge($comments, $comment);
+            }
+        }
+
+        $latestActivity=array();
+
+        $sort = array();
+        foreach ($comments as $key => $row)
+        {
+            $sort[$key] = $row['publishDate'];
+        }
+        array_multisort($sort, SORT_DESC, $comments);
+        foreach($comments as $key=>$act){
+            array_push($latestActivity, $act);
+        }
+        return $latestActivity;
+    }
+
     //επιστρέφει τα trailers που έχουμε για μια ταινία με βάση το id της
     public static function getTrailers($id)
     {
@@ -88,9 +133,7 @@ class Movie extends Model
     public static function getAllGenres()
     {
         $moviesar= Movie::pluck('IdMovie');
-//        $movies =json_encode($moviesar[0], True);
         $allgenres=array();
-//        return $moviesar;
         foreach ($moviesar as $movieid) {
             $genres=Movie::getGenres($movieid);
             foreach ($genres as $genre) {
@@ -162,39 +205,42 @@ class Movie extends Model
         //καλεί την function getGenres του model Movie
         $genres=Movie::getGenres($id);
         //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
-        $movie=array_merge($movie[0],array("genres" => $genres));
-        //καλεί την function getWallpapers του model Movie
-        $wallpapers=Movie::getWallpapers($id);
-        //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
-        $movie=array_merge($movie,array("wallpapers" => $wallpapers));
+        if(isset($movie[0])) {
+            $movie = array_merge($movie[0], array("genres" => $genres));
+            //καλεί την function getWallpapers του model Movie
+            $wallpapers = Movie::getWallpapers($id);
+            //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
+            $movie = array_merge($movie, array("wallpapers" => $wallpapers));
 
-        //καλεί την function getTrailers του model Movie
-        $trailers=Movie::getTrailers($id);
-        //μετατροπή του object σε πίνακα
-        $trailers = json_decode($trailers, True);
-        //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
-        $movie=array_merge($movie,array("trailers" => $trailers));
+            //καλεί την function getTrailers του model Movie
+            $trailers = Movie::getTrailers($id);
+            //μετατροπή του object σε πίνακα
+            $trailers = json_decode($trailers, True);
+            //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
+            $movie = array_merge($movie, array("trailers" => $trailers));
 
-        //καλεί την function getCast του model Movie
-        $cast=Movie::getCast($id);
-        //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
-        $movie=array_merge($movie,array("cast" => $cast));
+            //καλεί την function getCast του model Movie
+            $cast = Movie::getCast($id);
+            //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
+            $movie = array_merge($movie, array("cast" => $cast));
 
-        //καλεί την function getCrew του model Movie
-        $crew=Movie::getCrew($id);
-        //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
-        $movie=array_merge($movie,array("crew" => $crew));
+            //καλεί την function getCrew του model Movie
+            $crew = Movie::getCrew($id);
+            //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
+            $movie = array_merge($movie, array("crew" => $crew));
 
-        //καλεί την function getFollowers του model Movie
-        $followers=Movie::getFollowers($id);
-        //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
-        $movie=array_merge($movie,array("followers" => $followers));
+            //καλεί την function getFollowers του model Movie
+            $followers = Movie::getFollowers($id);
+            //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
+            $movie = array_merge($movie, array("followers" => $followers));
 
-        //καλεί την function getComments του model Movie
-        $comments=Movie::getComments($id);
-        //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
-        $movie=array_merge($movie,array("comments" => $comments));
-
+            //καλεί την function getComments του model Movie
+            $comments = Movie::getComments($id);
+            //Βάζουμε τα δεδομένα που βρήκαμε στον πίνακα με τα δεδομένα της ταινίας
+            $movie = array_merge($movie, array("comments" => $comments));
+        }else{
+            $movie=array();
+        }
 
         //επιστρέφει τον πίνακα την ταινία και όλα τα δεδομένα της
         return $movie;
@@ -212,112 +258,6 @@ class Movie extends Model
         }
 
         return $movies;
-
-        $moviesar = array('current_page'=>$page,'data'=>array(),'first_page_url'=>route('popular',array('page'=>1)),'from'=>'','last_page'=>'','last_page_url'=>'','next_page_url'=>'','path'=>route('home'),'per_page'=>'','prev_page_url'=>'','to'=>'','total'=>'');
-        $movies=array();
-        if(isset($genres[0]) && ($fromYear!==null && $toYear!==null)||1==1){
-            $genres=array('action');
-                $moviesartemp = Movie::findGenres($genres);
-            $sort = array();
-            foreach ($moviesartemp as $key => $row)
-            {
-                $sort[$key] = $row['popularity'];
-            }
-            array_multisort($sort, SORT_DESC, $moviesartemp);
-                foreach($moviesartemp as $key=>$movie){
-                    $yearar=explode('-',$movie['releaseDate']);
-                    if($yearar[0]>=$fromYear && $yearar[0]>=$toYear){
-                        array_push($movies, $movie);
-                    }
-                }
-
-        }elseif(isset($genres[0]) && $fromYear!==null ||1==1){
-            $genres=array('action');
-            $moviesartemp = Movie::findGenres($genres);
-            $sort = array();
-            foreach ($moviesartemp as $key => $row)
-            {
-                $sort[$key] = $row['popularity'];
-            }
-            array_multisort($sort, SORT_DESC, $moviesartemp);
-            foreach($moviesartemp as $movie){
-                $yearar=explode('-',$movie['releaseDate']);
-                if($yearar[0]>=$fromYear){
-                    array_push($movies, $movie);
-                }
-            }
-
-        }elseif(isset($genres[0])  && $toYear!==null){
-            $moviesartemp = Movie::findGenres($genres);
-            $sort = array();
-            foreach ($moviesartemp as $key => $row)
-            {
-                $sort[$key] = $row['popularity'];
-            }
-            array_multisort($sort, SORT_DESC, $moviesartemp);
-            foreach($moviesartemp as $movie){
-                $yearar=explode('-',$movie['releaseDate']);
-                if($yearar[0]<=$toYear){
-                    array_push($movies, $movie);
-                }
-            }
-        }elseif($fromYear!==null && $toYear!==null){
-
-        }elseif(isset($genres[0])){
-            $moviesartemp = Movie::findGenres($genres);
-            $sort = array();
-            foreach ($moviesartemp as $key => $row)
-            {
-                $sort[$key] = $row['popularity'];
-            }
-            array_multisort($sort, SORT_DESC, $moviesartemp);
-            foreach($moviesartemp as $movie){
-
-                    array_push($movies, $movie);
-
-            }
-        }elseif($fromYear!==null ){
-
-        }elseif($toYear!==null){
-
-        }else{
-            $moviesar = Movie::orderBy("popularity", "desc")->paginate(25);
-            $moviesar = json_decode(json_encode($moviesar), True);
-            foreach ($moviesar['data'] as $key => $movie) {
-                $genres = Movie::getGenres($movie['idMovie']);
-                $movies[$key] = array_merge($movie, array("genres" => $genres));
-            }
-        }
-        $moviesar['total']=count($movies);
-        $moviesar['per_page']=25;
-        $moviesar['last_page']=intdiv($moviesar['total'],$moviesar['per_page']);
-        if($moviesar['last_page']*$moviesar['per_page']< $moviesar['total']){
-            $moviesar['last_page']+=1;
-        }
-        $moviesar['to']=$moviesar['per_page']*$moviesar['current_page'];
-        $moviesar['from']=$moviesar['to']-24;
-        if($moviesar['to']>$moviesar['total']){
-            $moviesar['to']=$moviesar['total'];
-        }
-
-//        route('popular',array('page'=>1))
-        $moviesar['last_page_url']=  route('popular',array('page'=> $moviesar['last_page']));
-        if( $moviesar['last_page']>$moviesar['current_page']) {
-            $moviesar['next_page_url'] = route('popular', array('page' => $moviesar['current_page'] + 1));
-        }
-        if ($moviesar['current_page']>1){
-
-            $moviesar['prev_page_url'] = route('popular', array('page' => $moviesar['current_page'] - 1));
-        }
-
-//        return  $movies;
-        for ($i=$moviesar['from'];$i<=$moviesar['to'];$i++){
-//            echo $i;
-            if($i>0) {
-                array_push($moviesar['data'], $movies[$i - 1]);
-            }
-        }
-        return $moviesar;
     }
 
     public static function getTopRated()

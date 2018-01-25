@@ -7,7 +7,7 @@
                     <div class="movie-credit-info-cont-outer movielist-info-cont-outer col-xs-12 col-sm-12 col-md-6 col-lg-6">
                         <div class="movie-credit-img-cont  col-xs-12 col-sm-3 col-md-2 col-lg-2">
                             @if($movie['poster']!='')
-                            <img class="movielist-img" alt="{{$movie['title']}}" src="https://image.tmdb.org/t/p/w130{{$movie['poster']}}">
+                            <img class="movielist-img" alt="{{$movie['title']}}" src="https://image.tmdb.org/t/p/w154{{$movie['poster']}}">
                             @else
                             <img class="movielist-img" alt="{{$movie['title']}}" src="/cinema/public/img/no_avatar.jpg">
                             @endif

@@ -49,11 +49,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
 
-//        print_r($data);
-        echo "<br><br>";
-//        print_r(request()->all());
 
-//        exit;
         return Validator::make($data, [
             'username' => 'required|string|max:255|unique:users',
             'email' => 'required|string|email|max:255|unique:users',
@@ -71,22 +67,22 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $fileName = 'null';
-        print_r($data);
-//        exit;
+        $fileName = null;
+        if(isset($data['userimage'])){
         $image = $data['userimage'];
         if ($image->isValid()) {
             $destinationPath = public_path('uploads/users/images');
             $extension = $image->getClientOriginalExtension();
-            $fileName = uniqid().'.'.$extension;
+            $fileName = uniqid() . '.' . $extension;
 
             $image->move($destinationPath, $fileName);
+        }
         }
         return User::create([
             'username' => $data['username'],
             'email' => $data['email'],
             'image' =>  $fileName,
-            'aboutme' =>  $data['aboutme'],
+            'info' =>  $data['aboutme'],
             'password' => bcrypt($data['password']),
         ]);
     }

@@ -39,15 +39,26 @@
             </ul>
 
         </div>
-        <ul class="nav navbar-nav user-menu">
+
             @if(!Auth::check())
+            <ul class="nav navbar-nav user-menu">
             <li><a href="{{route('login')}}">Login</a></li>
             <li><a href="{{route('register')}}">Register</a></li>
+            </ul>
             @else
+            <ul class="nav navbar-nav user-menu">
                 <li><a href="{{route('profile')}}">Profile</a></li>
-                <li><a href="{{route('logout')}}">Logout</a></li>
+                <li><a href="{{route('profilesettings')}}">Settings</a></li>
+            {{--</ul>--}}
+             {{--<ul class="nav navbar-nav user-menu" style="margin-left: 0;">--}}
+                 @if(Auth::user()->privilages_level<3)
+                     <li><a href="{{route('dashboard')}}">Dashboard</a></li>
+                 @endif
+                 <li><a href="{{route('logout')}}">Logout</a></li>
+            </ul>
+
             @endif
-        </ul>
+
         <ul class="hamsearch">
             <li style="border-color: darkcyan;">
                 <form method="POST" id="menuSearchFormham" class="menuSearchForm" action="http://localhost:8080/cinema/public/menu-search">
@@ -61,13 +72,6 @@
 <div class="menu-ghost"></div>
 <div class="search-container display-none"><div id="search-results" class="container"></div></div>
 <script>
-    $('.ham-menu').click(function(){
-        if($('.user-menu').hasClass('user-menu-ham')){
-            $('.user-menu').removeClass('user-menu-ham')
-        }else{
-            $('.user-menu').addClass('user-menu-ham')
-        }
-    });
     $('.main-menu>li').hover(function(){
         $(this).css('border-color','cyan');
         $(this).prev().css('border-color','cyan');

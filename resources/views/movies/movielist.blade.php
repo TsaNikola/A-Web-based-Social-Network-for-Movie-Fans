@@ -58,9 +58,9 @@ header('X-Frame-Options:Allow-From https://www.youtube.com');
                             <div class="movie-credit-info-cont-outer movielist-info-cont-outer col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                 <div class="movie-credit-img-cont  col-xs-12 col-sm-3 col-md-2 col-lg-2">
                                     @if($movie['poster']!='')
-                                        <img class="movielist-img" alt="{{$movie['title']}}" src="https://image.tmdb.org/t/p/w130{{$movie['poster']}}">
+                                        <img class="movielist-img" alt="{{$movie['title']}}" src="https://image.tmdb.org/t/p/w154{{$movie['poster']}}">
                                     @else
-                                        <img class="movielist-img" alt="{{$movie['title']}}" src="/cinema/public/img/no_avatar.jpg">
+                                        <img class="movielist-img" alt="{{$movie['title']}}" src="{{Request::root()}}/img/default_poster.jpg.png">
                                     @endif
                                 </div>
                                 <div class="movielist-info  col-xs-12 col-sm-9 col-md-10 col-lg-10">
@@ -103,7 +103,12 @@ header('X-Frame-Options:Allow-From https://www.youtube.com');
                                     <div class="movie-info movielist-sec-info">
 
                                         <div class="secondary-info">
-                                            <div class="movielist-description">{{$movie['description']}}</div>
+                                            @if($movie['description']!='' || $movie['description']=='Add the plot')
+                                                <div class="movielist-description">{{$movie['description']}}</div>
+                                            @else
+                                                <div><span>There is no scenario description for {{$movie['title']}} yet.</span></div>
+                                            @endif
+
                                         </div>
                                     </div>
                                 </div>
@@ -123,25 +128,7 @@ header('X-Frame-Options:Allow-From https://www.youtube.com');
     {{ $movies->links() }}
 </div>
     </div>
-{{--<script>--}}
-    {{--$('.movielistForm input').on('change', function(){--}}
-        {{--$('#movielistForm').submit();--}}
-    {{--});--}}
-    {{--$(".movielistForm").submit(function (event) {--}}
-        {{--event.preventDefault();--}}
-            {{--$.ajax({--}}
-                {{--type: "post",--}}
-                {{--url: '{{route('postpopular')}}',--}}
-{{--//                data: $(this).serialize(),--}}
-                {{--data: $(this).serialize(),--}}
-                {{--success: function (response) {--}}
-                    {{--alert('ok');--}}
-                    {{--$('#response').html(data);--}}
 
-                {{--}--}}
-            {{--});--}}
-    {{--});--}}
-{{--</script>--}}
 <div id="response"></div>
 <script>
     $('.filter-year').on("change paste keyup",function(){

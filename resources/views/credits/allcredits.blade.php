@@ -31,14 +31,14 @@
                     <div class="credits-search-results row" style="margin-left: 15px;">
                         @foreach($credits as $credit)
                             <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 movie-credit">
-                                <a href="{{route('credit',array('id'=>$credit['idPerson']))}}" class="credit-found-link" target="_blank">
+                                <a href="{{route('credit',array('id'=>$credit['idPerson']))}}" class="credit-found-link">
                                     <div class="credit-grid-item row">
                                         <div class="movie-credit-info-cont-outer col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                             <div class="movie-credit-img-cont  col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                                 @if($credit['picture']!='')
-                                                    <img class="credit-found-img" alt="{{$credit['name']}}" src="https://image.tmdb.org/t/p/w130{{$credit['picture']}}">
+                                                    <img class="credit-found-img" alt="{{$credit['name']}}" src="https://image.tmdb.org/t/p/w154{{$credit['picture']}}">
                                                 @else
-                                                    <img class="credit-found-img" alt="{{$credit['name']}}" src="/cinema/public/img/no_avatar.jpg">
+                                                    <img class="credit-found-img" alt="{{$credit['name']}}" src="{{Request::root()}}/img/no_avatar.jpg">
                                                 @endif
                                             </div>
                                             <div class="movie-credit-info col-xs-12 col-sm-12 col-md-6 col-lg-6">
